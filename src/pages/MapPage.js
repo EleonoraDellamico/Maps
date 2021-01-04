@@ -1,16 +1,18 @@
-import React,{ useEffect, useRef, useState}from "react"; 
-import mapboxgl from "mapbox-gl";
 
-//CHANGE KEY
-mapboxgl.accessToken = 'pk.eyJ1IjoiZ2l1bGlvNzgiLCJhIjoiY2tqaGNneGtiOTk1MzJ2cWpyemljZHQzcSJ9.HnFfA7OBcnwbaFJq-vB-5w';
+import useMapBox from "../hooks/useMapBox";
+
+
 const firstSpot = {
     lng: 144.8794,
     lat: -37.8020,
     zoom: 11.52
 }
 export const MapPage = () => {
-    const mapDiv = useRef();
-    const[mapa, setMap]= useState();
+    
+    const {coords, setRef}= useMapBox (firstSpot );
+    //REFACTORING USING HOOKS
+    /* const mapDiv = useRef();
+    const mapa = useRef();
      const[coords, setCoords]= useState(firstSpot);
    
     useEffect(()=>{
@@ -20,30 +22,28 @@ export const MapPage = () => {
         center: [firstSpot.lng, firstSpot.lat],
         zoom: firstSpot.zoom
 });
-    setMap(map);
-    },[]);
-
+    mapa.current= map;
+    },[]); */
 //MOVING MAPA
-    useEffect (()=>{
-        mapa?.on("move",()=>{
+/*     useEffect (()=>{
+        mapa.current?.on("move",()=>{
             console.log("hey");
-            const{lng, lat} = mapa.getCenter();
+            const{lng, lat} = mapa.current.getCenter();
             console.log(lng.lat);
             setCoords({
                 lng: lng.toFixed(4),
                 lat: lat.toFixed(4),
-                zoom:mapa.getZoom().toFixed(2)
+                zoom:mapa.current.getZoom().toFixed(2)
             })
         });
-
-    },[mapa]);
+    },[]); */
     return (
         <>
         <div className = "info">
             lng:{coords.lng} | lat:{coords.lat} | zoom {coords.zoom}
         </div>
         <div
-          ref= {mapDiv}
+          ref= {setRef}
           className="mapContainer"
         />
             
