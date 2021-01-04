@@ -18,6 +18,27 @@ export const useMapBox = (firstSpot ) =>{
     //MAP AND COORDS
     const mapa = useRef();
     const[coords, setCoords]= useState(firstSpot);
+
+    //ADD MARKERS
+     const addMarker = useCallback ((ev)=>{
+         const { lng, lat }= ev.lngLat;
+         const marker = new mapboxgl.Marker();
+         marker.id = v4 (); // TODO si el marcador ya tiene ID
+      
+         marker
+        .setLngLat ([lng,lat])
+        .addTo (mapa.current)
+        .setDraggable(true);
+    
+      point.current[ marker.id] = marker;
+    
+      //LISTENING  the movement
+      marker.on("drag", ({target})=>{
+       const {id}=target;
+       const {lng, lat }= target.getLngLat();
+      });
+
+     },[]);
    
     useEffect(()=>{
         const map = new mapboxgl.Map({
@@ -46,24 +67,27 @@ export const useMapBox = (firstSpot ) =>{
     // ADD PIN WHEN WE USE CLICK
      useEffect(() => {
          mapa.current?.on("click", (ev)=> {
-             console.log(ev);
-            const { lng, lat }= ev.lngLat;
-            const marker = new mapboxgl.Marker();
-            marker.id = v4 (); // TODO si el marcador ya tiene ID
-            marker
-                  .setLngLat ([lng,lat])
-                  .addTo (mapa.current)
-                  .setDraggable(true);
-            point.current[ marker.id] = marker;
+
+            addMarker(ev);
+             
+            /* const { lng, lat }= ev.lngLat; */
+            /* const marker = new mapboxgl.Marker(); */
+            /* marker.id = v4 (); // TODO si el marcador ya tiene ID */
+            /* marker */
+            /*       .setLngLat ([lng,lat]) */
+            /*       .addTo (mapa.current) */
+            /*       .setDraggable(true); */
+            /* point.current[ marker.id] = marker; */
 
          })
 
-     },[]);
+     },[addMarker]);
 
 
 
 
     return{
+        addMarker,
         coords,
         point,
         setRef
