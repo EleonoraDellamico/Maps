@@ -1,16 +1,21 @@
 import { useCallback, useEffect, useRef, useState}from "react";
 import mapboxgl from "mapbox-gl";
+import {v4} from "uuid";
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZ2l1bGlvNzgiLCJhIjoiY2tqaGNneGtiOTk1MzJ2cWpyemljZHQzcSJ9.HnFfA7OBcnwbaFJq-vB-5w';
 export const useMapBox = (firstSpot ) =>{
+    //REFER TO DIVMAP
     const mapDiv = useRef();
     const setRef = useCallback ( (node)=> {
         mapDiv.current=node;
     },[] )
+
+    //MARKER'S REFERENCE
+    const point = useRef({});
     
     
     
-    
+    //MAP AND COORDS
     const mapa = useRef();
     const[coords, setCoords]= useState(firstSpot);
    
@@ -24,9 +29,9 @@ export const useMapBox = (firstSpot ) =>{
     mapa.current= map;
     },[firstSpot ]);
 
+    // MOVING MAP
         useEffect (()=>{
         mapa.current?.on("move",()=>{
-            console.log("hey");
             const{lng, lat} = mapa.current.getCenter();
             console.log(lng.lat);
             setCoords({
@@ -37,10 +42,30 @@ export const useMapBox = (firstSpot ) =>{
         });
 
     },[]);
+    
+    // ADD PIN WHEN WE USE CLICK
+     useEffect(() => {
+         mapa.current?.on("click", (ev)=> {
+             console.log(ev);
+            const { lng, lat }= ev.lngLat;
+            const marker = new mapboxgl.Marker();
+            marker.id = v4 (); // TODO si el marcador ya tiene ID
+            marker
+                  .setLngLat ([lng,lat])
+                  .addTo (mapa.current)
+                  .setDraggable(true);
+            point.current[ marker.id] = marker;
+
+         })
+
+     },[]);
+
+
 
 
     return{
         coords,
+        point,
         setRef
 
     }
