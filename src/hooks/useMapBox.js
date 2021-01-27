@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState}from "react";
 import mapboxgl from "mapbox-gl";
 import {v4} from "uuid";
+import { Subject } from "rxjs";
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZ2l1bGlvNzgiLCJhIjoiY2tqaGNneGtiOTk1MzJ2cWpyemljZHQzcSJ9.HnFfA7OBcnwbaFJq-vB-5w';
 export const useMapBox = (firstSpot ) =>{
@@ -13,7 +14,9 @@ export const useMapBox = (firstSpot ) =>{
     //MARKER'S REFERENCE
     const point = useRef({});
     
-    
+    //OBSERVABLE RXJS
+    const movementMark = useRef( new Subject ());
+    const newMark = useRef( new Subject ());
     
     //MAP AND COORDS
     const mapa = useRef();
@@ -31,12 +34,20 @@ export const useMapBox = (firstSpot ) =>{
         .setDraggable(true);
     
       point.current[ marker.id] = marker;
+
+      //TODO; si el marcador tiene ID no emitir 
+      newMark.current.next({
+          id: marker.id,
+          lng,
+          lat
+      });
     
       //LISTENING  the movement
       marker.on("drag", ({target})=>{
        const {id}=target;
        const {lng, lat }= target.getLngLat();
-      });
+
+        movementMark.current.next({id,lng,lat})});
 
      },[]);
    
@@ -54,7 +65,6 @@ export const useMapBox = (firstSpot ) =>{
         useEffect (()=>{
         mapa.current?.on("move",()=>{
             const{lng, lat} = mapa.current.getCenter();
-            console.log(lng.lat);
             setCoords({
                 lng: lng.toFixed(4),
                 lat: lat.toFixed(4),
@@ -89,6 +99,8 @@ export const useMapBox = (firstSpot ) =>{
     return{
         addMarker,
         coords,
+        movementMark$: movementMark.current,
+        newMark$: newMark.current,
         point,
         setRef
 

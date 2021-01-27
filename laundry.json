@@ -1,0 +1,62 @@
+[
+  {
+    "deviceType": 0,
+    "deviceStatus": 0,
+    "location": {
+      "latitude": 40.3959382,
+      "longitude": -3.7159792
+    },
+    "capacityKg": 10
+  },
+  {
+    "deviceType": 0,
+    "deviceStatus": 0,
+    "location": {
+      "latitude": 40.3959382,
+      "longitude": -3.7159792
+    },
+    "capacityKg": 15
+  },
+  {
+    "deviceType": 0,
+    "deviceStatus": 0,
+    "location": {
+      "latitude": 40.3959382,
+      "longitude": -3.7159792
+    },
+    "capacityKg": 10
+  },
+  {
+    "deviceType": 0,
+    "deviceStatus": 0,
+    "location": {
+      "latitude": 40.3959382,
+      "longitude": -3.7159792
+    },
+    "capacityKg": 15
+  },
+  {
+    "deviceType": 1,
+    "deviceStatus": 0,
+    "location": null,
+    "capacityKg": 15
+  },
+  {
+    "deviceType": 1,
+    "deviceStatus": 0,
+    "location": null,
+    "capacityKg": 25
+  },
+  {
+    "deviceType": 1,
+    "deviceStatus": 2,
+    "location": null,
+    "capacityKg": 25
+  },
+  {
+    "deviceType": 1,
+    "deviceStatus": 1,
+    "location": null,
+    "capacityKg": 25
+  }
+]

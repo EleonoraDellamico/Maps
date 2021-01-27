@@ -1,15 +1,30 @@
 
+import { cleanup } from "@testing-library/react";
+import { Marker } from "mapbox-gl";
+import { useEffect } from "react";
 import useMapBox from "../hooks/useMapBox";
 
 
 const firstSpot = {
-    lng: 144.8794,
-    lat: -37.8020,
+    lng: -3.7136112,
+    lat: 40.3965164,
     zoom: 11.52
 }
 export const MapPage = () => {
     
-    const {coords, setRef}= useMapBox (firstSpot );
+    const {coords, setRef, newMark$, movementMark$}= useMapBox (firstSpot );
+   
+    useEffect(()=>{
+newMark$.subscribe (marker =>{
+    console.log(marker);
+})
+    }, [newMark$]);
+    useEffect (()=>{
+        movementMark$.subscribe(marker=>{
+        console.log(marker);
+        })
+    });
+
     //REFACTORING USING HOOKS
     /* const mapDiv = useRef();
     const mapa = useRef();
